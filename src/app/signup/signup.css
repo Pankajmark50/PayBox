@@ -43,6 +43,7 @@
 
 .right-panel h2 {
   margin-bottom: 10px;
+  text-align: center;
 }
 
 .right-panel form {
@@ -56,11 +57,22 @@
 
 .row {
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   gap: 10px;
 }
 
-input, select {
+.row input{
   width: 100%;
+}
+
+.col
+{
+  display: flex;
+  flex-direction: column;
+}
+
+input, select {
   padding: 10px;
   border: 1px solid #bdd0d9;
   border-radius: 5px;
@@ -88,7 +100,8 @@ input, select {
   font-size: 0.9rem;
 }
 
-.signin-link a {
+
+.signin-link a{
   color: #005e83;
   text-decoration: none;
 }

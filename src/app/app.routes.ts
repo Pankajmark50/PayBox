@@ -5,7 +5,7 @@ import { Dashboard } from './dashboard/dashboard';
 
 export const routes: Routes = [
     { path: "", component: Signin},
-    { path: "signin", component: Signin},
+    { path: 'signin', component: Signin},
     { path: "signup", component: Signup},
     { path: "dashboard", component: Dashboard}
 ];
