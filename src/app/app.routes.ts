@@ -4,8 +4,8 @@ import { Signup } from './signup/signup';
 import { Dashboard } from './dashboard/dashboard';
 
 export const routes: Routes = [
-    { path: "", component: Signin},
+    { path: "", redirectTo:'/signin' , pathMatch: 'full'},
     { path: 'signin', component: Signin},
     { path: "signup", component: Signup},
-    { path: "dashboard", component: Dashboard}
+    { path: "dashboard", component: Dashboard},
 ];

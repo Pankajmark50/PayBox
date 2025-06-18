@@ -4,8 +4,7 @@
     <nav>
       <ul>
         <li [class.active]="activeForm==='dashboard'" (click)="showDashboard()"><i class="icon-home"></i> Dashboard</li>
-        <li><i class="icon-transactions"></i> Transactions</li>
-        <li><i class="icon-settings"></i> Settings</li>
+        <li (click)="showTransactions()"><i class="icon-transactions"></i> Transactions</li>
       </ul>
     </nav>
     <div class="action-buttons">
@@ -21,66 +20,157 @@
     </div>
   </div>
 
-  <div class="main-content">
+  <div *ngIf="activeForm === 'dashboard'" class="main-content-one">
+    <div class="header">
+      <h2>Dashboard</h2>
+      <div></div>
+      <span class="last-updated" *ngIf="lastUpdatedTime">
+        Last updated: Today, {{ lastUpdatedTime | date: 'shortTime' }}
+      </span>
+      <button (click)="logout()" class="trash-icon">Logout</button>
 
-    <!-- DASHBOARD SECTION -->
-    <div *ngIf="activeForm === 'dashboard'">
-      <div class="header">
-        <h2>Dashboard</h2>
-        <span class="last-updated">Last updated: Today, 12:45 PM</span>
+    </div>
+
+    <div class="balance-card">
+      <div class="balance-info">
+        <div class="current-balance-label">Current Balance</div>
+        <div class="current-balance">₹{{ currentBalance }}</div>
       </div>
-
-      <div class="balance-card">
-        <div class="balance-info">
-          <div class="current-balance-label">Current Balance</div>
-          <div class="current-balance">Unlimited</div>
-          <div class="account-number">**** **** **** 4582</div>
-        </div>
-        <div class="card-icon">
-          <i class="icon-card"></i>
-        </div>
+      <div class="card-icon">
+        <i class="icon-card"></i>
       </div>
+    </div>
 
-      <div class="transaction-history">
-        <div class="history-header">
-          <h3>Transaction History</h3>
-          <a href="#">View All</a>
-        </div>
-
-        <div class="transaction-item">
+    <div class="transaction-history">
+      <div class="history-header">
+        <h3>Transaction History</h3>
+        <button (click)="showTransactions()" class="trash-icon">View All Transactions</button>
+      </div>
+      <div class="transaction-scroll">
+        <div class="transaction-item" *ngFor="let txn of transactions | slice:0:3">
           <div class="transaction-details">
             <i class="icon-transfer"></i>
             <div>
-              <div>Transfer to Purab</div>
-              <div class="date">Today, 2:30 PM</div>
+              <div>
+                <ng-container [ngSwitch]="txn.transactionType.toLowerCase()">
+                  <span *ngSwitchCase="'credit'">Received from {{ txn.receiverName }}</span>
+                  <span *ngSwitchCase="'debit'">Transfer to {{ txn.receiverName }}</span>
+                  <span *ngSwitchCase="'wallet'">Added money to wallet</span>
+                  <span *ngSwitchDefault>Transaction</span>
+                </ng-container>
+
+              </div>
+              <div class="date">{{ txn.transactionDate | date:'short' }}</div>
             </div>
           </div>
           <div class="transaction-status">
-            <span class="amount negative">-$250.00</span>
-            <span class="status completed">Completed</span>
+            <span class="amount"
+              [ngClass]="{'negative': txn.transactionType === 'Debit', 'positive': txn.transactionType !== 'Debit'}">
+              {{ txn.transactionType === 'Debit' ? '-' : '+' }}₹{{ txn.transferAmount }}
+            </span>
+            <span class="transactionId">{{txn.transactionId}}</span>
+
+            <button (click)="deletetransid(txn.transactionId)" class="trash-icon"><i class="bi bi-trash"></i>
+            </button>
+
+            <!-- <span class="status">{{ txn.transactionType }}</span> -->
           </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="activeForm === 'add'" class="main-content-one">
+    <form (ngSubmit)="addMoney(addMoneyModel)">
+      <div class="form-card-add">
+        <h3>Add Money</h3>
+        <input type="number" placeholder="Enter Amount" name="amount" [(ngModel)]="addMoneyModel.amount"
+          class="form-input" />
+        <button class="submit-btn" type="submit">Add</button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="activeForm === 'send'" class="main-content-two">
+    <form (ngSubmit)="sendMoney(sendMoneyModel)">
+      <div class="form-card-send">
+        <h3>Send Money</h3>
+        <input type="text" placeholder="Receiver Phone No." name="receiverPhoneNumber"
+          [(ngModel)]="sendMoneyModel.receiverPhoneNumber" class="form-input" />
+        <input type="number" placeholder="Amount" name="amount" [(ngModel)]="sendMoneyModel.amount"
+          class="form-input" />
+        <button class="submit-btn">Send</button>
+      </div>
+    </form>
+
+    <div class="user-list-container">
+      <h3 class="select-label">Select User:</h3>
+      <div class="user-list">
+        <div *ngFor="let user of userList" class="user-list-item"
+          [class.selected]="sendMoneyModel.receiverPhoneNumber === user.phoneNumber"
+          (click)="sendMoneyModel.receiverPhoneNumber = user.phoneNumber">
+          <p>{{ user.username }} {{ user.phoneNumber }}</p>
         </div>
       </div>
     </div>
 
-    <!-- ADD MONEY FORM -->
-    <div *ngIf="activeForm === 'add'" class="centered-form">
-      <div class="form-card">
-        <h3>Add Money</h3>
-        <input type="number" placeholder="Enter Amount" class="form-input" />
-        <button class="submit-btn">Add</button>
+    <!-- <label class="select-label">Select User:</label>
+    <select name="" id="users" [(ngModel)]="sendMoneyModel.receiverPhoneNumber" class="custom-select">
+      <option value="" disabled selected hidden>Select a user</option>
+      <option *ngFor="let data of userList" [value]="data.phoneNumber">
+        {{data.username}} | {{data.phoneNumber}}
+      </option>
+    </select> -->
+  </div>
+
+  <div *ngIf="activeForm === 'transactions'" class="main-content-three">
+        <div  class="transaction-history">
+      <div class="history-header">
+        <h3>Transaction History</h3>
+        <button *ngIf="transactions.length>0" (click)="Deletetrans()" class="trash-icon">Delete All Transactions</button>
       </div>
+
+      <div *ngIf="transactions.length>0; else notransactions" class="transaction-scroll-two">
+        <div class="transaction-item" *ngFor="let txn of transactions">
+          <div class="transaction-details">
+            <i class="icon-transfer"></i>
+            <div>
+              <div>
+                <ng-container [ngSwitch]="txn.transactionType.toLowerCase()">
+                  <span *ngSwitchCase="'credit'">Received from {{ txn.receiverName }}</span>
+                  <span *ngSwitchCase="'debit'">Transfer to {{ txn.receiverName }}</span>
+                  <span *ngSwitchCase="'wallet'">Added money to wallet</span>
+                  <span *ngSwitchDefault>Transaction</span>
+                </ng-container>
+
+              </div>
+              <div class="date">{{ txn.transactionDate | date:'short' }}</div>
+            </div>
+          </div>
+          <div class="transaction-status">
+            <span class="amount"
+              [ngClass]="{'negative': txn.transactionType === 'Debit', 'positive': txn.transactionType !== 'Debit'}">
+              {{ txn.transactionType === 'Debit' ? '-' : '+' }}₹{{ txn.transferAmount }}
+            </span>
+            <span class="transactionId">{{txn.transactionId}}</span>
+
+            <button (click)="deletetransid(txn.transactionId)" class="trash-icon"><i class="bi bi-trash"></i>
+            </button>
+
+            <!-- <span class="status">{{ txn.transactionType }}</span> -->
+          </div>
+        </div>
+
+      </div>
+      <ng-template #notransactions>
+        <p style="text-align: center;">No Transactions has been found</p>
+      </ng-template>
     </div>
 
-    <!-- SEND MONEY FORM -->
-    <div *ngIf="activeForm === 'send'" class="centered-form">
-      <div class="form-card">
-        <h3>Send Money</h3>
-        <input type="tel" placeholder="Receiver Phone No." class="form-input" />
-        <input type="number" placeholder="Amount" class="form-input" />
-        <button class="submit-btn">Send</button>
-      </div>
-    </div>
 
   </div>
+
+<div class="toast" *ngIf="toastMessage" [ngClass]="toastType">
+  {{ toastMessage }}
 </div>

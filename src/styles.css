@@ -10,6 +10,11 @@
     --bg-100: #fffefb;
     --bg-200: #f5f4f1;
     --bg-300: #cccbc8;
+    --sb-track-color: #c9ccce;
+    --sb-thumb-color: #7b8cb5;
+    --sb-size: 11px;
+
+
 }
 
 body {
@@ -21,4 +26,25 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+
+}
+
+body::-webkit-scrollbar {
+    width: var(--sb-size);
+}
+
+body::-webkit-scrollbar-track {
+    background: var(--sb-track-color);
+    border-radius: 2px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb-color);
+    border-radius: 2px;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+    body {
+        scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+    }
 }

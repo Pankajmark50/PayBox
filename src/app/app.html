@@ -1,10 +1,4 @@
-
-<!-- <div class="container">
-   <app-signup></app-signup>
-   <app-dashboard></app-dashboard>
-   <app-signin></app-signin>
-</div> -->
-
-<router-outlet></router-outlet>
+<app-signin *ngIf="!isloggedin" (loginEvent)="received($event)"></app-signin>
+<router-outlet *ngIf="isloggedin"/>
 
 
