@@ -10,6 +10,7 @@
     <div class="action-buttons">
       <button class="add-money" (click)="showAddMoney()">+ Add Money</button>
       <button class="send-money" (click)="showSendMoney()">&#x21c4; Send Money</button>
+      <button (click)="logout()" class="send-money">Logout</button>
     </div>
     <div class="profile">
       <div class="avatar">PD</div>
@@ -27,8 +28,6 @@
       <span class="last-updated" *ngIf="lastUpdatedTime">
         Last updated: Today, {{ lastUpdatedTime | date: 'shortTime' }}
       </span>
-      <button (click)="logout()" class="trash-icon">Logout</button>
-
     </div>
 
     <div class="balance-card">
@@ -51,6 +50,8 @@
           <div class="transaction-details">
             <i class="icon-transfer"></i>
             <div>
+              <!-- <span class="transactionId">{{txn.transactionId}}</span> -->
+
               <div>
                 <ng-container [ngSwitch]="txn.transactionType.toLowerCase()">
                   <span *ngSwitchCase="'credit'">Received from {{ txn.receiverName }}</span>
@@ -68,7 +69,6 @@
               [ngClass]="{'negative': txn.transactionType === 'Debit', 'positive': txn.transactionType !== 'Debit'}">
               {{ txn.transactionType === 'Debit' ? '-' : '+' }}₹{{ txn.transferAmount }}
             </span>
-            <span class="transactionId">{{txn.transactionId}}</span>
 
             <button (click)="deletetransid(txn.transactionId)" class="trash-icon"><i class="bi bi-trash"></i>
             </button>
@@ -125,10 +125,11 @@
   </div>
 
   <div *ngIf="activeForm === 'transactions'" class="main-content-three">
-        <div  class="transaction-history">
+    <div class="transaction-history">
       <div class="history-header">
         <h3>Transaction History</h3>
-        <button *ngIf="transactions.length>0" (click)="Deletetrans()" class="trash-icon">Delete All Transactions</button>
+        <button *ngIf="transactions.length>0" (click)="Deletetrans()" class="trash-icon">Delete All
+          Transactions</button>
       </div>
 
       <div *ngIf="transactions.length>0; else notransactions" class="transaction-scroll-two">
@@ -171,6 +172,6 @@
 
   </div>
 
-<div class="toast" *ngIf="toastMessage" [ngClass]="toastType">
-  {{ toastMessage }}
-</div>
+  <div class="toast" *ngIf="toastMessage" [ngClass]="toastType">
+    {{ toastMessage }}
+  </div>

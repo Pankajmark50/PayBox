@@ -23,7 +23,7 @@ export class Signup {
     this.services.signupdetail(form).subscribe(data=>{
       this.Data = data.result;
       alert(data.response);
-      this.routes.navigate(["/login"]);
+      this.routes.navigate(["/signin"]);
     })
   }
 
