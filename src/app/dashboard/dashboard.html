@@ -79,7 +79,12 @@
 
       </div>
     </div>
+    <div class="chat">
+      <app-chat></app-chat>
+    </div>
   </div>
+
+
 
   <div *ngIf="activeForm === 'add'" class="main-content-one">
     <form (ngSubmit)="addMoney(addMoneyModel)">

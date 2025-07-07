@@ -5,7 +5,7 @@
   border-radius: 10px;
   overflow: hidden;
   height: 600px;
-  max-width: 1000px;
+  min-width: 1000px;
 }
 
 .left-panel {

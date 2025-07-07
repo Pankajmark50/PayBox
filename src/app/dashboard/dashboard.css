@@ -449,3 +449,10 @@ nav li:hover {
   font-size: 1.1em;
   vertical-align: middle;
 }
+
+.chat {
+  position: fixed;
+  align-self: flex-end;
+  justify-self: flex-end;
+  z-index: 999;
+}

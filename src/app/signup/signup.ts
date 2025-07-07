@@ -20,6 +20,7 @@ export class Signup {
   Data:any;
 
   onSignupSubmit(form: SignupModel) {
+    form.isAdmin = this.signupModel.isAdmin || false;
     this.services.signupdetail(form).subscribe(data=>{
       this.Data = data.result;
       alert(data.response);

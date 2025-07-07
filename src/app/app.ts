@@ -5,10 +5,11 @@ import { Signin } from './signin/signin';
 import { Dashboard } from './dashboard/dashboard';
 import { routes } from './app.routes';
 import { CommonModule } from '@angular/common';
+import { Chat } from './chat/chat';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Signin,CommonModule],
+  imports: [RouterOutlet, Signin,CommonModule,Chat],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

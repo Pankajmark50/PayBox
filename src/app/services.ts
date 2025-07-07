@@ -9,43 +9,43 @@ import { Observable } from 'rxjs';
 export class Services {
 
   constructor(private http: HttpClient) { }
-  url="https://skytm-api.azurewebsites.net"
+  url="https://localhost:7250"
 
     signupdetail(data:SignupModel):Observable<any>{
-    return this.http.post<any>(this.url+"/api/Auth/signup",data);
+    return this.http.post<any>("https://localhost:7250/api/Auth/Register",data);
   }
 
   logindetail(data:LoginModel):Observable<any>{
-    return this.http.post<any>(this.url+"/api/Auth/login", data);
+    return this.http.post<any>("https://localhost:7250/api/Auth/Login", data);
   }
 
   addMoney(data:AddMoney):Observable<any>{
-    return this.http.post<any>(this.url+"/api/Wallet/add", data);
+    return this.http.post<any>("https://localhost:7250/api/Wallet/add", data);
   }
 
     sendMoney(data:SendMoney):Observable<any>{
-    return this.http.post<any>(this.url+"/api/Transactions/pay", data);
+    return this.http.post<any>("https://localhost:7250/api/Transaction/pay", data);
   }
 
   balance(phoneNumber:string): Observable<any>{
-    return this.http.get<any>(this.url+`/api/Users/balance?phoneNumber=${phoneNumber}`)
+    return this.http.get<any>(`${this.url}/api/User/Balance?phoneNumber=${phoneNumber}`)
   }
 
   getTransactions(phoneNumber: string): Observable<TransactionResponse> {
-    return this.http.get<TransactionResponse>(`${this.url}/api/Transactions/history?phoneNumber=${phoneNumber}`);
+    return this.http.get<TransactionResponse>(`${this.url}/api/Transaction/history?phoneNumber=${phoneNumber}`);
   }
 
   getUserList():Observable<any>{
-    return this.http.get<any>(this.url+'/api/Users/basic-list');
+    return this.http.get<any>(this.url+'/api/User/usersList');
   }
 
   DeleteTransactionById(tid:number):Observable<any>{
-    return this.http.delete<any>(`${this.url}/api/Transactions/DeleteTransectionById?tid=${tid}`)
+    return this.http.delete<any>(`${this.url}/api/Transaction/DeleteTransactionHistoryById?tid=${tid}`)
   }
 
   DeleteTransaction(phoneNumber: string):Observable<any>
   {
-    return this.http.delete<any>(`${this.url}/api/Transactions/history?phoneNumber=${phoneNumber}`)
+    return this.http.delete<any>(`${this.url}/api/Transaction/DeleteTransactionHistory?phoneNumber=${phoneNumber}`)
   }
 }
 
@@ -55,6 +55,8 @@ export class SignupModel{
   phoneNumber!: string
   gender!: string
   password!: string
+  imageUrl!: string
+  isAdmin!: boolean
 }
 
 export class LoginModel{

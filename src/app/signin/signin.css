@@ -5,7 +5,7 @@
   border-radius: 10px;
   overflow: hidden;
   height: 600px;
-  max-width: 1000px;
+  min-width: 1000px;
 }
 
 .left-panel {
@@ -42,10 +42,16 @@
 }
 
 .right-panel h2 {
+  text-align: center;
   margin-bottom: 10px;
 }
 
 .right-panel form {
+  display: flex;
+  flex-direction: column;
+}
+
+.col{
   display: flex;
   flex-direction: column;
 }
@@ -55,7 +61,6 @@
 }
 
 input {
-  width: 100%;
   padding: 10px;
   border: 1px solid #bdd0d9;
   border-radius: 5px;

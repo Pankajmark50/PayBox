@@ -3,10 +3,12 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AddMoney, SendMoney, Services, Transaction, TransactionResponse } from '../services';
 import { Router } from '@angular/router';
+import { Chat } from "../chat/chat";
+import { App } from '../app';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, Chat],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
@@ -51,7 +53,7 @@ export class Dashboard {
   Balance() {
     this.services.balance(this.userPhoneNumber).subscribe(
       data => {
-        this.currentBalance = data.result.amount;
+        this.currentBalance = data.result;
       });
     this.updateLastUpdateTime();
   }
